@@ -1,4 +1,4 @@
-public class main {
+public class Studsa_boll {
     public static void main(String[] args) {
         //Variabellåda
         double ballPosX = 0;
@@ -15,17 +15,17 @@ public class main {
             ballSpeedY += gravity/updates;
             ballPosY += ballSpeedY/updates;
             if (ballPosY <= 0) {
-                ballPosY = ballPosY * -1;
-                ballSpeedY = ballSpeedY * -1;
+                ballPosY = (ballPosY * -1)*0.9;
+                ballSpeedY = (ballSpeedY * -1)*0.9;
             }
 
 
             a++;
-            if (a == updates) {
+            if (true) {
                 timePassed++;
                 a = 0;
                 //Någon cool metod som skriver ut tabell varje sekund.
-                System.out.println("time passed:" + timePassed + " Y position: " + ballPosY);
+                System.out.println(ballPosY);
             }
         }
         System.out.println("Done");
