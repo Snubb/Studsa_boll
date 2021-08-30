@@ -1,8 +1,5 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
@@ -11,7 +8,7 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
     private Thread thread;
 
-    int fps = 120;
+    int fps = 60;
 
     private boolean isRunning;
 
