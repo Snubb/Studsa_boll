@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
@@ -15,10 +16,8 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
     private BufferStrategy bs;
 
-    double ballPosX = 10;
-    double ballPosY = 50;
-    double ballSpeedX = 5;
-    double ballSpeedY = 0;
+    public ArrayList<myBalls> balls = new ArrayList<>();
+
     private static final double gravity = 1;
 
     public Studsa_boll_but_grafik() {
@@ -83,7 +82,9 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
         g.setColor(Color.black);
 
-        g.fillOval((int)Math.round(ballPosX) - 5, (int)Math.round(ballPosY) - 5, 5, 5);
+        for (int i = 0; i <= balls.size(); i++) {
+            g.fillOval((int)Math.round(balls.get(i).Hitbox.x), (int)Math.round(balls.get(i).Hitbox.y), 5, 5);
+        }
 
         g.dispose();
         bs.show();
