@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
@@ -7,6 +8,10 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
     private final int width = 600;
     private final int height = 600;
+
+    int numOfBalls = 0;
+
+    private final Rectangle mouse = new Rectangle();
 
     private Thread thread;
 
@@ -16,9 +21,9 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
     private BufferStrategy bs;
 
-    public ArrayList<myBalls> balls = new ArrayList<>();
+    public ArrayList<myBalls2> balls = new ArrayList<>();
 
-    private static final double gravity = 1;
+
 
     public Studsa_boll_but_grafik() {
 
@@ -27,9 +32,16 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
         frame.add(this);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addKeyListener(new KL());
         frame.setVisible(true);
 
+        this.addMouseMotionListener(new Studsa_boll_but_grafik.MML());
+        this.addMouseListener(new Studsa_boll_but_grafik.ML());
+
         isRunning = false;
+
+        mouse.width = 5;
+        mouse.height = 5;
     }
 
     public static void main(String[] args) {
@@ -82,8 +94,8 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
         g.setColor(Color.black);
 
-        for (int i = 0; i <= balls.size(); i++) {
-            g.fillOval((int)Math.round(balls.get(i).Hitbox.x), (int)Math.round(balls.get(i).Hitbox.y), 5, 5);
+        for (int i = 0; i < numOfBalls; i++) {
+                g.fillOval((int)Math.round(balls.get(i).ballPosX - 5), (int)Math.round(balls.get(i).ballPosY - 5), 5, 5);
         }
 
         g.dispose();
@@ -91,27 +103,62 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
     }
 
     private void update() {
-        ballPosX += ballSpeedX;
-        ballSpeedY += gravity/10;
-        ballPosY += ballSpeedY;
-        if (ballPosY >= 600) {
-            ballPosY = ballPosY - (ballPosY - 600) * 2;
-            ballSpeedY = (ballSpeedY * -1)*0.9;
-            if (ballSpeedX > 0.05) {
-                ballSpeedX -= 0.05;
-            } else if (ballSpeedX < -0.05) {
-                ballSpeedX += 0.05;
-            } else {
-                ballSpeedX = 0;
-                ballSpeedY = 0;
+        for (int i = 0; i < numOfBalls; i++) {
+            balls.get(i).fall();
+            balls.get(i).bounce();
+            balls.get(i).bounceX();
+        }
+    }
+
+    private class MML implements MouseMotionListener {
+        @Override
+        public void mouseDragged(MouseEvent mouseEvent) { }
+        @Override
+        public void mouseMoved(MouseEvent mouseEvent) {
+            mouse.x = mouseEvent.getX();
+            mouse.y = mouseEvent.getY();
+        }
+    }
+
+    private class ML implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent mouseEvent) { }
+
+        @Override
+        public void mousePressed(MouseEvent mouseEvent) {
+            numOfBalls++;
+            balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x));
+        }
+        @Override
+        public void mouseReleased(MouseEvent mouseEvent) { }
+        @Override
+        public void mouseEntered(MouseEvent mouseEvent) { }
+        @Override
+        public void mouseExited(MouseEvent mouseEvent) { }
+    }
+    private class KL implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {
+            if (keyEvent.getKeyChar() == ' ') {
+                numOfBalls++;
+                double rand = (Math.random());
+                if (rand <= 0.5) {
+                    balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x));
+                } else {
+                    balls.add(new myBalls2(-5, 0.1, mouse.y, mouse.x));
+                }
+                System.out.println(rand);
+
             }
         }
-        if (ballPosX >= 600) {
-            ballSpeedX = (ballSpeedX * -1)*0.9;
-        }
-        if (ballPosX <= 5) {
-            ballSpeedX = (ballSpeedX * -1)*0.9;
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
         }
 
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {
+        }
     }
 }

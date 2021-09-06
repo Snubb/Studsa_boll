@@ -15,11 +15,22 @@ public class myBalls2 {
     }
 
     public void bounce() {
-        if (this.ballPosY >= 600) {
-            this.ballPosY = 599;
+        if (this.ballPosY > 600) {
+            this.ballPosY = 600 + (this.ballPosY - 600)/2;
             this.ballSpeedY *= -1;
             this.ballSpeedY *= 0.8;
-            this.ballSpeedX -= 0.05;
+            if (ballSpeedY > -0.6 && this.ballSpeedY < 0) {
+                this.ballSpeedY = 0;
+            }
+            if (ballSpeedX <= 0 && ballSpeedX > -0.2) {
+                this.ballSpeedX = 0;
+            } else if (ballSpeedX >= 0 && ballSpeedX < 0.2) {
+                this.ballSpeedX = 0;
+            } else if (ballSpeedX > 0) {
+                this.ballSpeedX -= 0.015;
+            } else {
+                this.ballSpeedX += 0.015;
+            }
         }
     }
 
