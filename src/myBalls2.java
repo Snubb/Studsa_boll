@@ -6,12 +6,14 @@ public class myBalls2 {
     public double ballSpeedX = 4;
     public double ballSpeedY = 0;
     public double gravity = 1;
+    public int dupe = 3;
 
-    public myBalls2(double ballSpeedX, double ballSpeedY, double ballPosY, double ballPosX) {
+    public myBalls2(double ballSpeedX, double ballSpeedY, double ballPosY, double ballPosX, int dupe) {
         this.ballPosX = ballPosX;
         this.ballPosY = ballPosY;
         this.ballSpeedX = ballSpeedX;
         this.ballSpeedY = ballSpeedY;
+        this.dupe = dupe;
     }
 
     public boolean bounceCheck() {
@@ -23,6 +25,7 @@ public class myBalls2 {
             this.ballPosY = 600 + (this.ballPosY - 600)/2;
             this.ballSpeedY *= -1;
             this.ballSpeedY *= 0.8;
+            this.dupe--;
             if (ballSpeedY > -0.6 && this.ballSpeedY < 0) {
                 this.ballSpeedY = 0;
             }
@@ -52,6 +55,10 @@ public class myBalls2 {
         this.ballPosY += this.ballSpeedY;
         this.ballSpeedY += this.gravity/10;
         this.ballPosX += this.ballSpeedX;
+    }
+
+    public boolean dupee() {
+        return dupe > 0;
     }
 
     public double getPosX() {
