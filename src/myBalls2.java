@@ -14,6 +14,10 @@ public class myBalls2 {
         this.ballSpeedY = ballSpeedY;
     }
 
+    public boolean bounceCheck() {
+        return this.ballPosY > 600;
+    }
+
     public void bounce() {
         if (this.ballPosY > 600) {
             this.ballPosY = 600 + (this.ballPosY - 600)/2;
@@ -32,6 +36,10 @@ public class myBalls2 {
                 this.ballSpeedX += 0.015;
             }
         }
+    }
+
+    public boolean stopped() {
+        return ballSpeedX == 0;
     }
 
     public void bounceX() {

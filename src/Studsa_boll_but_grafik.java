@@ -105,8 +105,17 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
     private void update() {
         for (int i = 0; i < numOfBalls; i++) {
             balls.get(i).fall();
-            balls.get(i).bounce();
+            //balls.get(i).bounce();
             balls.get(i).bounceX();
+            if (balls.get(i).bounceCheck()) {
+                balls.get(i).bounce();
+                numOfBalls++;
+                balls.add(new myBalls2(-balls.get(i).ballSpeedX, balls.get(i).ballSpeedY, balls.get(i).ballPosY, balls.get(i).ballPosX));
+                if (balls.get(i).stopped()) {
+                    balls.remove(i);
+                    numOfBalls--;
+                }
+            }
         }
     }
 
