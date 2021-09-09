@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
-    private final int width = 600;
+    private final int width = 1000;
     private final int height = 600;
 
     int numOfBalls = 0;
@@ -92,10 +92,11 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
         g.setColor(Color.white);
         g.fillRect(0,0,width,height);
 
-        g.setColor(Color.black);
+
 
         for (int i = 0; i < numOfBalls; i++) {
-                g.fillOval((int)Math.round(balls.get(i).ballPosX - 5), (int)Math.round(balls.get(i).ballPosY - 5), 5, 5);
+            g.setColor(balls.get(i).color);
+            g.fillOval((int)Math.round(balls.get(i).ballPosX - 5), (int)Math.round(balls.get(i).ballPosY - 5), 5, 5);
         }
 
         g.dispose();
@@ -103,6 +104,7 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
     }
 
     private void update() {
+        System.out.println(numOfBalls);
         for (int i = 0; i < numOfBalls; i++) {
             balls.get(i).fall();
             //balls.get(i).bounce();
@@ -110,13 +112,12 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
             if (balls.get(i).bounceCheck()) {
                 balls.get(i).bounce();
                 if (balls.get(i).dupee()) {
-                    System.out.println(balls.get(i).dupe);
+                    balls.add(new myBalls2(-balls.get(i).ballSpeedX, balls.get(i).ballSpeedY, 0, balls.get(i).ballPosX, balls.get(i).dupe, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))));
                     numOfBalls++;
-                    balls.add(new myBalls2(-balls.get(i).ballSpeedX, balls.get(i).ballSpeedY, balls.get(i).ballPosY, balls.get(i).ballPosX, balls.get(i).dupe));
                 }
                 if (balls.get(i).stopped()) {
-                    balls.remove(i);
                     numOfBalls--;
+                    balls.remove(i);
                 }
             }
         }
@@ -139,8 +140,8 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
+            balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 5, new Color(0,0,0)));
             numOfBalls++;
-            balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 5));
         }
         @Override
         public void mouseReleased(MouseEvent mouseEvent) { }
@@ -153,14 +154,13 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
         @Override
         public void keyTyped(KeyEvent keyEvent) {
             if (keyEvent.getKeyChar() == ' ') {
-                numOfBalls++;
                 double rand = (Math.random());
                 if (rand <= 0.5) {
-                    balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 5));
+                    balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 15, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))));
                 } else {
-                    balls.add(new myBalls2(-5, 0.1, mouse.y, mouse.x, 5));
+                    balls.add(new myBalls2(-5, 0.1, mouse.y, mouse.x, 15, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))));
                 }
-                System.out.println(rand);
+                numOfBalls++;
 
             }
         }

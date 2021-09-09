@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Random;
 
 public class myBalls2 {
     public double ballPosX;
@@ -7,13 +8,15 @@ public class myBalls2 {
     public double ballSpeedY = 0;
     public double gravity = 1;
     public int dupe = 3;
+    public Color color;
 
-    public myBalls2(double ballSpeedX, double ballSpeedY, double ballPosY, double ballPosX, int dupe) {
+    public myBalls2(double ballSpeedX, double ballSpeedY, double ballPosY, double ballPosX, int dupe, Color color) {
         this.ballPosX = ballPosX;
         this.ballPosY = ballPosY;
         this.ballSpeedX = ballSpeedX;
         this.ballSpeedY = ballSpeedY;
         this.dupe = dupe;
+        this.color = color;
     }
 
     public boolean bounceCheck() {
@@ -46,7 +49,7 @@ public class myBalls2 {
     }
 
     public void bounceX() {
-        if (this.ballPosX <= 0 || this.ballPosX >= 600) {
+        if (this.ballPosX <= 0 || this.ballPosX >= 1000) {
             this.ballSpeedX = (this.ballSpeedX * -1);
         }
     }
