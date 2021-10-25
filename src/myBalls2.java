@@ -1,34 +1,71 @@
 import java.awt.*;
-import java.util.Random;
 
 public class myBalls2 {
-    public double ballPosX;
-    public double ballPosY;
-    public double ballSpeedX = 4;
-    public double ballSpeedY = 0;
-    public double gravity = 1;
-    public int dupe = 3;
-    public Color color;
+    private double ballPosX;
+    private double ballPosY;
+    private double ballSpeedX;
+    private double ballSpeedY;
+    private double gravity = 1;
+    private int dupe;
+    private int width;
+    private int height;
 
-    public myBalls2(double ballSpeedX, double ballSpeedY, double ballPosY, double ballPosX, int dupe, Color color) {
+    public double getBallPosX() {
+        return ballPosX;
+    }
+
+    public double getBallPosY() {
+        return ballPosY;
+    }
+
+    public double getBallSpeedX() {
+        return ballSpeedX;
+    }
+
+    public double getBallSpeedY() {
+        return ballSpeedY;
+    }
+
+    public int getDupe() {
+        return dupe;
+    }
+
+    private Color color;
+
+    public myBalls2(double ballSpeedX, double ballSpeedY, double ballPosY, double ballPosX, int dupe, Color color, int width, int height) {
         this.ballPosX = ballPosX;
         this.ballPosY = ballPosY;
         this.ballSpeedX = ballSpeedX;
         this.ballSpeedY = ballSpeedY;
         this.dupe = dupe;
         this.color = color;
+        this.width = width;
+        this.height = height;
     }
 
-    public boolean bounceCheck() {
-        return this.ballPosY > 600;
+    public Color getColor() {
+        return color;
     }
 
-    public void bounce() {
+    public void bounce(double newGrav) {
+        if (this.ballPosY > 410) {
+            this.gravity = -newGrav;
+
+            this.ballSpeedY = this.ballSpeedY/1.1;
+            this.ballSpeedX = this.ballSpeedX/1.005;
+            if (this.ballSpeedX < 0.1 && this.ballSpeedX > -0.1) {
+                this.ballSpeedX = 0;
+            }
+        } else {
+            this.gravity = newGrav;
+        }
         if (this.ballPosY > 600) {
             this.ballPosY = 600 + (this.ballPosY - 600)/2;
             this.ballSpeedY *= -1;
             this.ballSpeedY *= 0.8;
             this.dupe--;
+            /*this.width += 10;
+            this.height += 10;*/
             if (ballSpeedY > -0.6 && this.ballSpeedY < 0) {
                 this.ballSpeedY = 0;
             }
@@ -41,6 +78,9 @@ public class myBalls2 {
             } else {
                 this.ballSpeedX += 0.015;
             }
+        } else if (this.ballPosY < this.height) {
+            this.ballPosY = this.height;
+            this.ballSpeedY *= -1;
         }
     }
 
@@ -49,9 +89,22 @@ public class myBalls2 {
     }
 
     public void bounceX() {
-        if (this.ballPosX <= 0 || this.ballPosX >= 1000) {
+        if (this.ballPosX <= this.width || this.ballPosX >= (1000)) {
             this.ballSpeedX = (this.ballSpeedX * -1);
+            if (this.ballPosX < 0) {
+                this.ballPosX = 0;
+            } else if (this.ballPosX > (1000)) {
+                this.ballPosX = 1000;
+            }
         }
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public void fall() {
@@ -64,19 +117,7 @@ public class myBalls2 {
         return dupe > 0;
     }
 
-    public double getPosX() {
-        return this.ballPosX;
-    }
-    public double getPosY() {
-        return this.ballPosY;
-    }
-
-    public double setPosX(int x) {
-        this.ballPosX = x;
-        return ballPosX;
-    }
-    public double setPosY(int y) {
-        this.ballPosY = y;
-        return ballPosY;
+    public void setGravity(double grav) {
+        this.gravity = grav;
     }
 }

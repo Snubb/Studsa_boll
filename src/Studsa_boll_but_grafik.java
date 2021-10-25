@@ -1,13 +1,24 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
-    private final int width = 1000;
+    private BufferedImage kirby;
+    private final int width = 1300;
     private final int height = 600;
+
+    double newGrav = 1;
+
+    double deltaT;
+
+    int spawn = 0;
 
     int numOfBalls = 0;
 
@@ -15,17 +26,22 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
     private Thread thread;
 
-    int fps = 60;
+    int fps = 1000;
 
     private boolean isRunning;
 
-    private BufferStrategy bs;
+    private boolean random = false;
 
     public ArrayList<myBalls2> balls = new ArrayList<>();
 
 
 
     public Studsa_boll_but_grafik() {
+        try {
+            kirby = ImageIO.read(new File("kirbgun.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         JFrame frame = new JFrame("Bouncy ball go wee");
         this.setSize(width,height);
@@ -66,7 +82,7 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        double deltaT = 1000.0/fps;
+        deltaT = 1000.0/fps;
         long lastTime = System.currentTimeMillis();
 
         while (isRunning) {
@@ -81,7 +97,7 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
     }
 
     private void draw() {
-        bs = getBufferStrategy();
+        BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
             createBufferStrategy(3);
             return;
@@ -92,34 +108,66 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
         g.setColor(Color.white);
         g.fillRect(0,0,width,height);
 
+        g.setColor(new Color(144, 144, 144));
+        g.fillRect(1000,0, 300, 600);
 
+
+        g.setColor(new Color(144, 144, 144));
+        g.fillRect(1100, 50, 100 ,100);
+
+        g.setColor(Color.black);
+        g.drawString("Number of balls: " + numOfBalls, 1100, 100);
+        g.drawString("random spawn: " + random, 1100, 150);
 
         for (int i = 0; i < numOfBalls; i++) {
-            g.setColor(balls.get(i).color);
-            g.fillOval((int)Math.round(balls.get(i).ballPosX - 5), (int)Math.round(balls.get(i).ballPosY - 5), 5, 5);
+            g.setColor(balls.get(i).getColor());
+            g.fillOval((int)Math.round(balls.get(i).getBallPosX() - balls.get(i).getWidth()), (int)Math.round(balls.get(i).getBallPosY() - balls.get(i).getHeight()), balls.get(i).getWidth(), balls.get(i).getHeight());
         }
+        for (int i = 0; i < numOfBalls; i++) {
+            g.drawImage(kirby, (int)Math.round(balls.get(i).getBallPosX()), (int)Math.round(balls.get(i).getBallPosY() - balls.get(i).getHeight()), balls.get(i).getWidth(), balls.get(i).getHeight(), null);
+            //g.fillOval((int)Math.round(balls.get(i).getBallPosX() - balls.get(i).getWidth()), (int)Math.round(balls.get(i).getBallPosY() - balls.get(i).getHeight()), balls.get(i).getWidth(), balls.get(i).getHeight());
+        }
+        g.setColor(new Color(95, 190, 255,120));
+        g.fillRect(0, 400, width, height);
+
 
         g.dispose();
         bs.show();
     }
 
     private void update() {
-        System.out.println(numOfBalls);
+        if (random) {
+            randomBallSpawn();
+        }
         for (int i = 0; i < numOfBalls; i++) {
+            //balls.get(i).setColor(new Color((int) (Math.random() * 255),  (int) (Math.random() * 255), (int) (Math.random() * 255)));
             balls.get(i).fall();
             //balls.get(i).bounce();
             balls.get(i).bounceX();
-            if (balls.get(i).bounceCheck()) {
-                balls.get(i).bounce();
-                if (balls.get(i).dupee()) {
-                    balls.add(new myBalls2(-balls.get(i).ballSpeedX, balls.get(i).ballSpeedY, 0, balls.get(i).ballPosX, balls.get(i).dupe, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))));
-                    numOfBalls++;
-                }
-                if (balls.get(i).stopped()) {
-                    numOfBalls--;
-                    balls.remove(i);
-                }
+            balls.get(i).bounce(newGrav);
+            if (balls.get(i).dupee()) {
+                balls.add(new myBalls2(-balls.get(i).getBallSpeedX(), balls.get(i).getBallSpeedY(), 0, balls.get(i).getBallPosX(), balls.get(i).getDupe(), new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)), balls.get(i).getWidth(), balls.get(i).getHeight()));
+                numOfBalls++;
             }
+            if (balls.get(i).stopped()) {
+                numOfBalls--;
+                balls.remove(i);
+            }
+
+        }
+    }
+
+    private void randomBallSpawn() {
+        spawn++;
+        if (spawn >= 15 && numOfBalls < 30) {
+            double rand = (Math.random());
+            if (rand <= 0.5) {
+                balls.add(new myBalls2(3, -5, (int)(Math.random()*600), (int)(Math.random()*1000), 0, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)), 70, 70));
+            } else {
+                balls.add(new myBalls2(-3, -5, (int)(Math.random()*600), (int)(Math.random()*1000), 0, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)), 70, 70));
+            }
+            numOfBalls++;
+            spawn = 0;
         }
     }
 
@@ -140,7 +188,7 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-            balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 5, new Color(0,0,0)));
+            balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 0, new Color(0,0,0), 15, 15));
             numOfBalls++;
         }
         @Override
@@ -156,12 +204,28 @@ public class Studsa_boll_but_grafik extends Canvas implements Runnable {
             if (keyEvent.getKeyChar() == ' ') {
                 double rand = (Math.random());
                 if (rand <= 0.5) {
-                    balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 15, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))));
+                    balls.add(new myBalls2(5, 0.1, mouse.y, mouse.x, 0, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)), 15, 15));
                 } else {
-                    balls.add(new myBalls2(-5, 0.1, mouse.y, mouse.x, 15, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255))));
+                    balls.add(new myBalls2(-5, 0.1, mouse.y, mouse.x, 0, new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255)), 15, 15));
                 }
                 numOfBalls++;
 
+            }
+            if (keyEvent.getKeyChar() == 'r') {
+                random = !random;
+            }
+            if (keyEvent.getKeyChar() == 'f') {
+                deltaT = 1000/Double.parseDouble(JOptionPane.showInputDialog("new fps"));
+            }
+            if (keyEvent.getKeyChar() == 'g') {
+                newGrav = Double.parseDouble(JOptionPane.showInputDialog("new gravity"));
+                for (int i = 0;i < numOfBalls; i++) {
+                    balls.get(i).setGravity(newGrav);
+                }
+            }
+            if (keyEvent.getKeyChar() == 'q') {
+                numOfBalls = 0;
+                balls.clear();
             }
         }
 
