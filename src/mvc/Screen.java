@@ -1,5 +1,9 @@
 package mvc;
 import mvc.Shapes.*;
+import mvc.Shapes.Point;
+import mvc.Shapes.Rectangle;
+
+import java.awt.*;
 
 /**
  * This is a class
@@ -307,7 +311,7 @@ public class Screen {
 
     public void clear() {
         for (int i = 0 ; i < pixels.length; i++) {
-            pixels[i] = 0x0;
+            pixels[i] = 0x000000;
         }
     }
 }

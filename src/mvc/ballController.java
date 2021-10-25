@@ -6,12 +6,12 @@ import java.util.ArrayList;
 public class ballController implements Runnable {
     private Thread thread;
     private boolean running = false;
-    private int fps = 25;
-    private int ups = 1;
+    private int fps = 60;
+    private int ups = 60;
     private ballModel model;
     private ballView view;
     private int width = 800;
-    private int height = 800;
+    private int height = 600;
     private int scale = 1;
     private JFrame frame;
     private String title = "";
@@ -23,6 +23,8 @@ public class ballController implements Runnable {
         view = new ballView(width, height, scale);
 
         frame = new JFrame(title);
+        //frame.setUndecorated(true);
+        //frame.setOpacity(0.5f);
         frame.setResizable(false);
         frame.add(view);
         frame.pack();
@@ -30,6 +32,8 @@ public class ballController implements Runnable {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.requestFocus();
+
+
     }
 
     public synchronized void start() {
@@ -72,14 +76,14 @@ public class ballController implements Runnable {
             }
 
             while (deltaFPS >= 1) {
-                view.render();
+                view.render(model.getBalls());
                 frames++;
                 deltaFPS--;
             }
 
             if(System.currentTimeMillis() - timer >= 1000) {
                 timer += 1000;
-                frame.setTitle(this.title + "  |  " + updates + " ups, " + frames + " fps");
+                frame.setTitle(this.title + "  |  " + updates + " ups, " + frames + " fps " + model.getNumBalls() + " balls");
                 frames = 0;
                 updates = 0;
             }
@@ -88,7 +92,8 @@ public class ballController implements Runnable {
     }
 
     public static void main(String[] args) {
-        ballController controller = new ballController();
+        ballController c = new ballController();
+        c.start();
     }
 
 }
