@@ -11,7 +11,7 @@ public class mvc_balls {
     private double ballSpeedY;
     private double gravity;
     private double radius;
-    private int color = 0xFFFFFF;
+    private int color;
     private Circle circle;
 
     public double getBallPosX() {
@@ -76,7 +76,7 @@ public class mvc_balls {
 
         if (this.ballPosY > 590) {
             this.ballPosY = 590 - (this.ballPosY - 590);
-            this.ballSpeedY *= -0.95;
+            this.ballSpeedY *= -0.80;
         }
         if (this.ballPosY < 10) {
             this.ballPosY = 10;

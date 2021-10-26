@@ -47,6 +47,7 @@ public class ballView extends Canvas {
     }
 
     public void draw(ArrayList<Shape> shapes, boolean white) {
+        //white boolean tells the renderer wether balls or background should be white
         screen.clear(white);
         for (Shape s : shapes) {
             screen.fill((Circle)s, ((Circle) s).getColor());
