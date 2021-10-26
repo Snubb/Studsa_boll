@@ -309,9 +309,15 @@ public class Screen {
         return point;
     }
 
-    public void clear() {
-        for (int i = 0 ; i < pixels.length; i++) {
-            pixels[i] = 0x000000;
+    public void clear(boolean color) {
+        if (color) {
+            for (int i = 0 ; i < pixels.length; i++) {
+                pixels[i] = 0x000000;
+            }
+        } else {
+            for (int i = 0 ; i < pixels.length; i++) {
+                pixels[i] = 0xFFFFFF;
+            }
         }
     }
 }

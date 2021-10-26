@@ -70,7 +70,7 @@ public class ballController implements Runnable {
 
             while(deltaUPS >= 1) {
                 model.update();
-                view.draw(model.getShapes());
+                view.draw(model.getShapes(), model.getWhiteBalls());
                 updates++;
                 deltaUPS--;
             }

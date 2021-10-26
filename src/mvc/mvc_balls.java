@@ -97,4 +97,8 @@ public class mvc_balls {
     public Shape getShape() {
         return circle;
     }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 }

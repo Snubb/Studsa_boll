@@ -46,8 +46,8 @@ public class ballView extends Canvas {
         return screen;
     }
 
-    public void draw(ArrayList<Shape> shapes) {
-        screen.clear();
+    public void draw(ArrayList<Shape> shapes, boolean white) {
+        screen.clear(white);
         for (Shape s : shapes) {
             screen.fill((Circle)s, ((Circle) s).getColor());
         }
