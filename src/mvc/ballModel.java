@@ -18,7 +18,7 @@ public class ballModel {
     public void update() {
         newBall++;
         if (newBall > 50) {
-            createBall(Math.random()*700, Math.random()*100, Math.random()*20, -10, 5, 10);
+            createBall(Math.random()*700, Math.random()*100, 20-(Math.random()*40), -10, 5, 10);
             newBall = 0;
         }
         for (int i = 0; i < numBalls; i++) {
